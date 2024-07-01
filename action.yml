@@ -1,0 +1,48 @@
+name: 'last-successful-build-action'
+description: 'Action to find the sha of the last successful workflow of a branch.'
+branding:
+  icon: rewind
+  color: blue
+inputs:
+  clean:
+    description: 'Determine if checkout should be cleaned'
+    default: true
+    required: false
+  relative_checkout_directory:
+    description: 'The relative checkout directory in terms of the runner/repository workspace'
+    required: true
+  token:
+    description: 'GITHUB_TOKEN or a repo scoped PAT.'
+    default: ${{ secrets.GITHUB_TOKEN }}
+    required: false
+  branch:
+    description: 'Branch for the workflow to look for.'
+    default: ${{ env.branch_name }}
+    required: false
+  verify:
+    description: 'Verify SHA of workflow run commit against list of commit SHAs in repository. Add verify if workflow is expected to contain commits that no longer exist (rebased commit history)'
+    required: false
+    default: 'false'
+  workflow:
+    description: 'Current workflow name'
+    default: ${{ github.workflow }}
+    required: false
+outputs:
+  sha:
+    description: 'Sha of the workflow-run matching the requirements.'
+  run-id:
+    description: 'Id of the workflow-run matching the requirements.'
+runs:
+  using: "composite"
+  steps:
+      - uses: actions/checkout@v4
+        with:
+          clean: ${{ inputs.clean }}
+          path: ${{ inputs.relative_checkout_directory }}
+      - name: Get latest successful sha
+        uses: SamhammerAG/last-successful-build-action@v4
+        with:
+          token: "${{ inputs.token }}"
+          branch: ${{ inputs.branch }}
+          workflow: "${{ inputs.workflow }}"
+          verify: ${{ inputs.verify }}$
