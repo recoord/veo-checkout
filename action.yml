@@ -13,11 +13,11 @@ inputs:
     required: true
   token:
     description: 'GITHUB_TOKEN or a repo scoped PAT.'
-    default: ${{ secrets.GITHUB_TOKEN }}
+    default: ${{ github.token }}
     required: false
   branch:
     description: 'Branch for the workflow to look for.'
-    default: ${{ env.branch_name }}
+    default: ${{ github.head_ref || github.ref_name }}
     required: false
   verify:
     description: 'Verify SHA of workflow run commit against list of commit SHAs in repository. Add verify if workflow is expected to contain commits that no longer exist (rebased commit history)'
