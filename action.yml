@@ -30,8 +30,10 @@ inputs:
 outputs:
   sha:
     description: 'Sha of the workflow-run matching the requirements.'
+    value: ${{ steps.lastrun.outputs.sha }}
   run-id:
     description: 'Id of the workflow-run matching the requirements.'
+    value: ${{ steps.lastrun.outputs.run-id }}
 runs:
   using: "composite"
   steps:
@@ -39,7 +41,8 @@ runs:
         with:
           clean: ${{ inputs.clean }}
           path: ${{ inputs.relative_checkout_directory }}
-      - name: Get latest successful sha
+      - id: lastrun
+        name: Get latest successful sha
         uses: SamhammerAG/last-successful-build-action@v4
         with:
           token: "${{ inputs.token }}"
