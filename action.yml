@@ -43,7 +43,7 @@ runs:
           path: ${{ inputs.relative_checkout_directory }}
       - id: lastrun
         name: Get latest successful sha
-        uses: SamhammerAG/last-successful-build-action@v4
+        uses: VeoVirt/last-successful-build-action@v7
         with:
           token: "${{ inputs.token }}"
           branch: ${{ inputs.branch }}
